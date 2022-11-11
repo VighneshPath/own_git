@@ -35,6 +35,16 @@ class MGit(commands: Array<String>) {
                 println(e)
             }
         }
+        else if(cmd1.equals("cat-file")){
+            val objectName = commands[1]
+            try{
+                val content : String = File(Paths.get(".mgit","objects",objectName).toString()).readText()
+                println(content)
+            }
+            catch(e : Exception){
+                println(e)
+            }
+        }
     }
     
 }
