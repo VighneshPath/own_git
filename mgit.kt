@@ -1,6 +1,8 @@
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 import java.io.File
+import java.security.MessageDigest
 
 class MGit(commands: Array<String>) {
     val cmd1 = commands[0]
@@ -21,7 +23,17 @@ class MGit(commands: Array<String>) {
 
             }
             println("Initialized mgit Successfully.")
-
+        }
+        else if(cmd1.equals("hash-object")){
+            try{
+                val fileContent = String(Files.readAllBytes(Paths.get(commands[1])))
+                val hash = MessageDigest.getInstance("SHA-1").digest(fileContent.toByteArray()).joinToString(""){"%02x".format(it)}
+                Files.copy(Paths.get(commands[1]), Paths.get(".mgit", "objects", hash) , StandardCopyOption.REPLACE_EXISTING)
+                println(hash)
+            }
+            catch(e : Exception){
+                println(e)
+            }
         }
     }
     
