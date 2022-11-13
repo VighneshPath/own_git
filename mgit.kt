@@ -14,13 +14,8 @@ class MGit(commands: Array<String>) {
                 Files.createDirectories(Paths.get(".mgit", "info"))
                 Files.createDirectories(Paths.get(".mgit", "refs", "heads"))
                 Files.createDirectories(Paths.get(".mgit", "refs", "tags"))
-
-                var file = File(".mgit\\HEAD")
-                file.createNewFile()
-
-                var file2 = File(".mgit\\config")
-                file2.createNewFile()
-
+                Files.createFile(Paths.get(".mgit", "HEAD"));
+                Files.createFile(Paths.get(".mgit", "config"))
             }
             println("Initialized mgit Successfully.")
         }
