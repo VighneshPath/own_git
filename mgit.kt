@@ -4,18 +4,37 @@ import java.nio.file.StandardCopyOption
 import java.io.File
 import java.security.MessageDigest
 
-class MGit() {
-    fun CMD__init(){
-        if(!Files.isDirectory(Paths.get(".mgit"))){
-            // Create info, objects, refs (With heads and tags) folders and HEAD and config files
-            Files.createDirectories(Paths.get(".mgit", "objects"))
-            Files.createDirectories(Paths.get(".mgit", "info"))
-            Files.createDirectories(Paths.get(".mgit", "refs", "heads"))
-            Files.createDirectories(Paths.get(".mgit", "refs", "tags"))
-            Files.createFile(Paths.get(".mgit", "HEAD"));
-            Files.createFile(Paths.get(".mgit", "config"))
+class MGit(commands: Array<String>) {
+    val cmd1 = commands[0]
+    init{
+        when(cmd1){
+            "init" -> CMD__init()
+            "hash-object" -> {
+                val path = commands[1]
+                CMD__hash_object(path)
+            }
+            "cat-file" -> {
+                val object_hash = commands[1]
+                CMD__cat_file(object_hash)
+            }
         }
-        println("Initialized mgit Successfully.")
+    }
+    fun CMD__init(){
+        try{
+            if(!Files.isDirectory(Paths.get(".mgit"))){
+                // Create info, objects, refs (With heads and tags) folders and HEAD and config files
+                Files.createDirectories(Paths.get(".mgit", "objects"))
+                Files.createDirectories(Paths.get(".mgit", "info"))
+                Files.createDirectories(Paths.get(".mgit", "refs", "heads"))
+                Files.createDirectories(Paths.get(".mgit", "refs", "tags"))
+                Files.createFile(Paths.get(".mgit", "HEAD"));
+                Files.createFile(Paths.get(".mgit", "config"))
+            }
+            println("Initialized mgit Successfully.")
+        }
+        catch(e: Exception){
+            println(e)
+        }
     }
 
     fun CMD__hash_object(path : String){
@@ -47,19 +66,6 @@ fun main(args: Array<String>) {
         print("Please add some command line arguments")
         return
     }
-    val MG = MGit()
-    val command = args[0]
-
-    when(command){
-        "init" -> MG.CMD__init()
-        "hash-object" -> {
-            val path = args[1]
-            MG.CMD__hash_object(path)
-        }
-        "cat-file" -> {
-            val object_hash = args[1]
-            MG.CMD__cat_file(object_hash)
-        }
-    }
+    val MG = MGit(args)
 }
 
